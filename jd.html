@@ -1,0 +1,257 @@
+<html>
+<body>
+<p>
+1.
+import java.sql.*;
+public class JDBCDemo {
+    public static void main(String[] args) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mydatabase", "root", "password");
+            Statement stmt = conn.createStatement();
+            String sql = "SELECT * FROM mytable";
+            boolean isResultSet = stmt.execute(sql);
+            if (isResultSet) {
+                // If the statement returns a ResultSet, process it
+                ResultSet rs = stmt.getResultSet();
+                while (rs.next()) {
+                    // Retrieve column values from the current row
+                    int id = rs.getInt("id");
+                    String name = rs.getString("name");
+                    int age = rs.getInt("age");
+                    System.out.println("ID: " + id + ", Name: " + name + ", Age: " + age);
+                }
+                rs.close();
+            } else {
+                // If the statement does not return a ResultSet, retrieve the update count
+                int updateCount = stmt.getUpdateCount();
+                System.out.println("Update count: " + updateCount);
+            }
+            // Close the statement and connection
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        }
+    }
+}
+<br>
+<br>
+
+
+2)
+import java.sql.*;
+public class JDBCDemo {
+    public static void main(String[] args) {
+        try {
+            // Register the JDBC driver
+            Class.forName("com.mysql.jdbc.Driver");
+            // Open a connection
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mydatabase", "root", "password");
+            // Create a statement
+            Statement stmt = conn.createStatement();
+            // Execute a query
+            String sql = "SELECT * FROM mytable";
+            ResultSet rs = stmt.executeQuery(sql);
+            // Process the result set
+            while (rs.next()) {
+                // Retrieve by column name
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                int age = rs.getInt("age");
+                // Display values
+                System.out.print("ID: " + id);
+                System.out.print(", Name: " + name);
+                System.out.println(", Age: " + age);
+            }
+            // Close the result set, statement, and connection
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        }
+    }
+}
+<br><br>
+3)
+import java.sql.*;
+public class JDBCDemo {
+    public static void main(String[] args) {
+        try {
+            // Register the JDBC driver
+            Class.forName("com.mysql.jdbc.Driver");
+            // Open a connection
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mydatabase", "root", "password");
+            // Create a statement
+            Statement stmt = conn.createStatement();
+            // Execute an update
+            String sql = "UPDATE mytable SET age = 30 WHERE id = 1";
+            int rowsAffected = stmt.executeUpdate(sql);
+            System.out.println("Rows affected: " + rowsAffected);
+            // Close the statement and connection
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        }
+    }
+}
+String sql = "INSERT INTO mytable (name, age) VALUES (?, ?)";
+PreparedStatement pstmt = conn.prepareStatement(sql);
+pstmt.setString(1, "John Doe");
+pstmt.setInt(2, 35);
+int rowsAffected = pstmt.executeUpdate();
+System.out.println("Rows affected: " + rowsAffected);
+<br><br>
+
+5)
+import java.sql.*;
+public class JDBCDemo {
+    public static void main(String[] args) {
+        try {
+            // Register the JDBC driver
+            Class.forName("com.mysql.jdbc.Driver");
+            // Open a connection
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mydatabase", "root", "password");
+            // Create a statement
+            Statement stmt = conn.createStatement();
+            // Execute a query
+            String sql = "SELECT * FROM mytable";
+            ResultSet rs = stmt.executeQuery(sql);
+            // Process the results
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                int age = rs.getInt("age");
+                System.out.println("ID: " + id + ", Name: " + name + ", Age: " + age);
+            }
+            // Close the statement and connection
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        }
+    }
+}
+<br><bR>
+6)
+import java.sql.*;
+public class JDBCDemo {
+    public static void main(String[] args) {
+        try {
+            // Register the JDBC driver
+            Class.forName("com.mysql.jdbc.Driver");
+            // Open a connection
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mydatabase", "root", "password");
+            // Create a prepared statement
+            String sql = "SELECT * FROM mytable WHERE age > ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, 30);
+            // Execute the query
+            ResultSet rs = pstmt.executeQuery();
+            // Process the results
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                int age = rs.getInt("age");
+                System.out.println("ID: " + id + ", Name: " + name + ", Age: " + age);
+            }
+            // Close the statement and connection
+            rs.close();
+            pstmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        }
+    }
+}
+<br><br>
+7)
+import java.sql.*;
+public class JDBCDemo {
+    public static void main(String[] args) {
+        try {
+            // Register the JDBC driver
+            Class.forName("com.mysql.jdbc.Driver");
+            // Open a connection
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mydatabase", "root", "password");
+            // Create a callable statement to call a stored procedure
+            String sql = "{CALL myproc(?, ?)}";
+            CallableStatement cstmt = conn.prepareCall(sql);
+            cstmt.setInt(1, 10);  // set the value of the first parameter
+            cstmt.registerOutParameter(2, Types.INTEGER);  // register the second parameter as an output parameter
+            // Execute the stored procedure
+            cstmt.execute();
+            // Get the output value of the stored procedure
+            int result = cstmt.getInt(2);
+            System.out.println("Result: " + result);
+            // Close the statement and connection
+            cstmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        }
+    }
+}
+<br><br>
+8)
+import java.sql.*;
+public class JDBCDemo {
+    public static void main(String[] args) {
+        try {
+            // Register the JDBC driver
+            Class.forName("com.mysql.jdbc.Driver");
+            // Open a connection
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mydatabase", "root", "password");
+            // Create a statement
+            Statement stmt = conn.createStatement();
+            // Enable batch processing
+            stmt.addBatch("INSERT INTO mytable (name, age) VALUES ('Alice', 25)");
+            stmt.addBatch("INSERT INTO mytable (name, age) VALUES ('Bob', 30)");
+            stmt.addBatch("INSERT INTO mytable (name, age) VALUES ('Charlie', 35)");
+            // Execute the batch
+            int[] results = stmt.executeBatch();
+            // Process the results
+            System.out.println("Inserted " + results.length + " records");
+            // Close the statement and connection
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        }
+    }
+}
+<br><br>
+</p>
+<body>
+</html>
